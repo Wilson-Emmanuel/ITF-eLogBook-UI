@@ -17,17 +17,17 @@ private  $editable;
         }
     }
     /**
-     * @return string
+     * @return
      */
-    public function getTask(): string
+    public function getTask()
     {
         return $this->task;
     }
 
     /**
-     * @param string $task
+     * @param $task
      */
-    public function setTask(string $task): void
+    public function setTask($task): void
     {
         $this->task = $task;
     }

@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CoordinatorController;
 use App\Http\Controllers\ManagerController;
+use App\Http\Controllers\SchoolController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\ProcessLoginController;
 use Illuminate\Support\Facades\Route;
@@ -23,14 +24,11 @@ Route::get('/', function () {
 })->name("home");
 
 
-Route::get('/itf/profile',function(){
-    return view('itf.profile');
-})->name("itf_profile");
 
-
-Route::get('/login', [ProcessLoginController::class,'view'])->name('long'); //#111932
+Route::get('/login', [ProcessLoginController::class,'view'])->name('login'); //#111932
 Route::post('/process_login', [ProcessLoginController::class,'login'])->name('process_login'); //#111932
 Route::get('/logout', [ProcessLoginController::class,'logout'])->name('logout'); //#111932
+Route::post('/update_password',[ProcessLoginController::class,'updatePassword']);
 
 //////////////////////////////////////////////
 /// //STUDENTS
@@ -39,6 +37,12 @@ Route::middleware(['student_login'])->group(function () {
             // Matches The "/student/dashboard" URL
         //Route::get('/user/{id}', [UserController::class, 'show']);
         Route::get('/dashboard',[StudentController::class,'index'] )->name("student_dashboard");
+        Route::get('/update_password',[StudentController::class,'show_update_password'] )->name("student_update_password");
+        Route::get('/update_bank',[StudentController::class,'show_update_bank'] )->name("student_update_bank");
+        Route::post('/update_bank',[StudentController::class,'update_bank'] );
+        Route::get('/logbook/{week_no}',[StudentController::class,'showLogBook'])->name("student_show_logbook");
+        Route::get('/logbook/{week}/{day}',[StudentController::class,'show_fill_logbook'])->name("student_show_fill_logbook");
+        Route::post('/logbook',[StudentController::class,'fill_logbook']);
     });
 });
 
@@ -47,9 +51,14 @@ Route::middleware(['student_login'])->group(function () {
 Route::middleware(['admin_login'])->group(function () {
     Route::prefix('itf')->group(function () {
         Route::get('/dashboard',[AdminController::class,'index'] )->name("itf_dashboard");
-        Route::post('/update_password',[AdminController::class,'updatePassword'] )->name("itf_update_password");
         Route::get('/create_coordinator',[AdminController::class,'showCreateCoordinator'] )->name("itf_show_create_coordinator");
-        Route::post('/create_coordinator',[AdminController::class,'createCoordinator'] )->name("itf_create_coordinator");
+        Route::post('/create_coordinator',[AdminController::class,'storeCoordinator'] )->name("itf_create_coordinator");
+        Route::get('/create_school',[SchoolController::class,'create'])->name("show_create_school");
+        Route::post('/create_school',[SchoolController::class,'store']);
+        Route::get('/create_staff',[AdminController::class,'create'])->name("show_create_staff");
+        Route::post('/create_staff',[AdminController::class,'store']);
+        Route::post('/sign_logbook',[AdminController::class,'signLogBook'] );
+        Route::post('/unsign_logbook',[AdminController::class,'unSignLogBook'] );
     });
 });
 
@@ -58,14 +67,22 @@ Route::middleware(['admin_login'])->group(function () {
 Route::middleware(['coordinator_login'])->group(function () {
     Route::prefix('coordinator')->group(function () {
         Route::get('/dashboard',[CoordinatorController::class,'index'] )->name("coordinator_dashboard");
+        Route::get('/create_student',[StudentController::class,'create'] )->name("coordinator_show_create_student");
+        Route::post('/create_student',[StudentController::class,'store'] );
+        Route::get('/create_manager',[ManagerController::class,'create'] )->name("coordinator_show_create_manager");
+        Route::post('/create_manager',[ManagerController::class,'store'] );
     });
 });
 
 //////////////////////////////////////////////
 /// //MANAGER
 Route::middleware(['manager_login'])->group(function () {
-    Route::prefix('coordinator')->group(function () {
+    Route::prefix('manager')->group(function () {
         Route::get('/dashboard',[ManagerController::class,'index'] )->name("manager_dashboard");
+        Route::post('/sign_week',[ManagerController::class,'signWeek'] );
+        Route::get('/students/{current}',[ManagerController::class,'show_students'])->name("manager_show_students");
+        Route::get('/student/{student_id}',[ManagerController::class,'view_student'])->name("manager_view_student");
+        Route::get('/logbook/{student_id}/{week_no}',[ManagerController::class,'view_student_logbook'])->name("manager_view_student_logbook");
     });
 });
 

@@ -52,8 +52,8 @@
                         <h3 class="text-center text-info">Login</h3>
                         <div class="form-group mb-0" >
                   @error('message')
-                      <div class='alert alert-danger alert-dismissible'>
-                          <span class='close' data-dismiss='alert'>
+                      <div class='alert alert-danger '>
+                          <span >
                             {{$message}}
                       &times;</span>
                       </div>

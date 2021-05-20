@@ -25,6 +25,10 @@
                                         <td>{{$user->getInfo()->getPhone()}}</td>
                                     </tr>
                                     <tr>
+                                        <th>Staff ID: </th>
+                                        <td>{{$user->getStaffNo()}}</td>
+                                    </tr>
+                                    <tr>
                                         <th>Branch: </th>
                                         <td>{{$user->getBranch()}}</td>
                                     </tr>
@@ -41,7 +45,7 @@
             <!-- Default panel contents -->
             <div class="panel-heading"><h4 class="text-secondary">Update Password</h4></div>
             <div class="panel-body">
-                <form class="form" action="/itf/update_password" method="post">
+                <form class="form" action="/update_password" method="post">
                     {{ csrf_field() }}
                     <div class="form-group mb-0" >
                         @error('message')
@@ -56,7 +60,7 @@
                         <div class='alert alert-success' >
                           <span >
                             {{$pageMessage}}
-                      &times;</span>
+                      </span>
                         </div>
                         @endisset
 
@@ -66,7 +70,7 @@
                        <input type="text" value="{{old('password')}}" required name="password" placeholder="Password" id="password" class="form-control">
                    </div>
                    <div class="form-group">
-                       <button type="submit" name="submit" class="btn btn-primary btn-md">Update</button>
+                       <button type="submit" name="submit" class="btn btn-primary btn-md"><i class="fas fa-edit"></i>  Update</button>
                    </div>
                </form>
             </div>

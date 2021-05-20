@@ -90,7 +90,7 @@ class Student
     /**
      * @return string
      */
-    public function getBankName(): string
+    public function getBankName()
     {
         return $this->bankName;
     }
@@ -98,7 +98,7 @@ class Student
     /**
      * @param string $bankName
      */
-    public function setBankName(string $bankName): void
+    public function setBankName($bankName): void
     {
         $this->bankName = $bankName;
     }
@@ -106,7 +106,7 @@ class Student
     /**
      * @return string
      */
-    public function getAccountNumber(): string
+    public function getAccountNumber()
     {
         return $this->accountNumber;
     }
@@ -114,7 +114,7 @@ class Student
     /**
      * @param string $accountNumber
      */
-    public function setAccountNumber(string $accountNumber): void
+    public function setAccountNumber($accountNumber): void
     {
         $this->accountNumber = $accountNumber;
     }
@@ -122,7 +122,7 @@ class Student
     /**
      * @return string
      */
-    public function getAccountName(): string
+    public function getAccountName()
     {
         return $this->accountName;
     }
@@ -130,7 +130,7 @@ class Student
     /**
      * @param string $accountName
      */
-    public function setAccountName(string $accountName): void
+    public function setAccountName($accountName): void
     {
         $this->accountName = $accountName;
     }
@@ -138,7 +138,7 @@ class Student
     /**
      * @return string
      */
-    public function getBankSortCode(): string
+    public function getBankSortCode()
     {
         return $this->bankSortCode;
     }
@@ -146,7 +146,7 @@ class Student
     /**
      * @param string $bankSortCode
      */
-    public function setBankSortCode(string $bankSortCode): void
+    public function setBankSortCode($bankSortCode): void
     {
         $this->bankSortCode = $bankSortCode;
     }
@@ -266,23 +266,23 @@ class Student
     /**
      * @return string
      */
-    public function getCoordinatorRemark(): string
+    public function getCoordinatorRemark()
     {
         return $this->coordinatorRemark;
     }
 
     /**
-     * @param string $coordinatorRemark
+     * @param $coordinatorRemark
      */
-    public function setCoordinatorRemark(string $coordinatorRemark): void
+    public function setCoordinatorRemark($coordinatorRemark)
     {
         $this->coordinatorRemark = $coordinatorRemark;
     }
 
     /**
-     * @return string
+     * @return
      */
-    public function getStartDate(): string
+    public function getStartDate()
     {
         return $this->startDate;
     }
@@ -500,6 +500,7 @@ class Student
             $weekObj = new WeeklyTasks($week);
             $this->setWeeks($weekObj);
         }
+
 
 
     }

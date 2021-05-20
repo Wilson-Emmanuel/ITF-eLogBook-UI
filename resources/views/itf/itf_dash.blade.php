@@ -25,12 +25,12 @@
         <div class="row display-table-row">
             <div class="col-md-2 col-sm-1 hidden-xs display-table-cell v-align box" id="navigation">
                 <div class="text-center">
-                    <a hef="home.html"><img src="{{asset('img/dash_logo.png')}}" width=50 height=60 alt="merkery_logo" >
+                    <a href="{{route('itf_dashboard')}}"><img src="{{asset('img/dash_logo.png')}}" width=50 height=60 alt="merkery_logo" >
                     </a>
                 </div>
                 <div class="navi">
                     <ul>
-                        <li class="active"><a href="{{route('itf_dashboard')}}"><i class="fas fa-user" aria-hidden="true"></i><span class="hidden-xs hidden-sm">Account</span></a></li>
+                        <li class="active"><a href="{{route('itf_dashboard')}}"><i class="fas fa-user" aria-hidden="true"></i><span class="hidden-xs hidden-sm">Profile</span></a></li>
                         <li><a href="#"><i class="fas fa-university" aria-hidden="true"></i><span class="hidden-xs hidden-sm">Schools</span></a></li>
                         <li><a href="#"><i class="fas fa-user-tag" aria-hidden="true"></i><span class="hidden-xs hidden-sm">Coordinators</span></a></li>
                         <li><a href="#"><i class="fas fa-user-graduate" aria-hidden="true"></i><span class="hidden-xs hidden-sm">Students</span></a></li>
@@ -60,10 +60,12 @@
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
                                 <li><a href="{{route('itf_dashboard')}}">Profile</a></li>
                                 <li><a href="{{route('itf_show_create_coordinator')}}">Create Coordinator</a></li>
-                                <li><a href="#">Manage Coordinators</a></li>
-                                <li><a href="#">Manage Students</a></li>
+<!--                                <li><a href="#">Manage Coordinators</a></li>-->
+<!--                                <li><a href="#">Manage Students</a></li>-->
                                 <li role="separator" class="divider"></li>
-                                <li><a href="#">Schools</a></li>
+                                <li><a href="{{route('show_create_school')}}">Add School</a></li>
+                                <li><a href="{{route('show_create_staff')}}">Add Staff</a></li>
+<!--                                <li><a href="#">Schools</a></li>-->
                             </ul>
                             </div>
                         </div>
