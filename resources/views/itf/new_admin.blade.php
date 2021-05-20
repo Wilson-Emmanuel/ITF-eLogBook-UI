@@ -5,9 +5,9 @@
     <div class=" col-xs-8 col-xs-offset-2 gutter">
         <div class="panel panel-default">
             <!-- Default panel contents -->
-            <div class="panel-heading"><h4 class="text-secondary">New Coordinator</h4></div>
+            <div class="panel-heading"><h4 class="text-secondary">New ITF Staff</h4></div>
             <div class="panel-body">
-                <form class="form" action="/itf/create_coordinator" method="post">
+                <form class="form" action="/itf/create_staff" method="post">
                     {{ csrf_field() }}
                     <div class="form-group mb-0" >
                         @error('message')
@@ -28,12 +28,13 @@
 
                     </div>
                     <div class="form-group">
-                        <h4 class="text-center">Coordinator Details</h4>
+                        <h4 class="text-center">Staff Details</h4>
                     </div>
                     <div class="form-group">
                         <label for="firstName" class="text-info">First Name <span class="text-danger">*</span></label><br>
                         <input type="text" value="{{old('firstName')}}" required name="firstName" placeholder="First Name" id="firstName" class="form-control">
                     </div>
+
                     <div class="form-group">
                         <label for="lastName" class="text-info">Last Name <span class="text-danger">*</span></label><br>
                         <input type="text" value="{{old('lastName')}}" required name="lastName" placeholder="Last Name" id="lastName" class="form-control">
@@ -41,6 +42,10 @@
                     <div class="form-group">
                         <label for="email" class="text-info">Email <span class="text-danger">*</span></label><br>
                         <input type="email" value="{{old('email')}}" required name="email" placeholder="Email Address" id="email" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="staffNo" class="text-info">Staff ID. <span class="text-danger">*</span></label><br>
+                        <input type="text" value="{{old('staffNo')}}" required name="staffNo" placeholder="Staff No." id="staffNo" class="form-control">
                     </div>
                     <div class="form-group">
                         <label for="phone" class="text-info">Phone <span class="text-danger">*</span></label><br>
@@ -52,22 +57,9 @@
                         <span class="text-muted text-sm-left"><i>At least 6 characters in length</i></span>
                     </div>
                     <div class="form-group">
-                        <h4 class="text-center">School Details</h4>
-                        <span class="text-muted">Select School If does not exists yet</span>
+                        <label for="branch" class="text-info">Branch <span class="text-danger">*</span></label><br>
+                        <input type="text" value="{{old('branch')}}"  required name="branch" placeholder="Branch" id="branch" class="form-control">
                     </div>
-                    <div class="form-group">
-                        <label for="department" class="text-info">Department <span class="text-danger">*</span></label><br>
-                        <input type="text" value="{{old('department')}}"  required name="department" placeholder="Department" id="department" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label for="school" class="text-info">School <span class="text-danger">*</span></label><br>
-                        <select type="text"   required name="school" id="school" class="form-control">
-                            @foreach($schools as $sc)
-                                <option value="{{$sc->getName()}}">{{$sc->getName()}}</option>
-                            @endforeach
-                        </select>
-                    </div>
-
                     <div class="form-group text-center">
                         <button type="submit" name="submit" class="btn btn-primary btn-md" ><i class="fas fa-plus-square"></i> Create</button>
                     </div>

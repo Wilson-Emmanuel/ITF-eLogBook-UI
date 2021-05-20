@@ -1,13 +1,16 @@
-@extends('itf.itf_dash')
+@extends('coordinator.dash')
 @section('content')
 
 <div class="row">
     <div class=" col-xs-8 col-xs-offset-2 gutter">
         <div class="panel panel-default">
             <!-- Default panel contents -->
-            <div class="panel-heading"><h4 class="text-secondary">New Coordinator</h4></div>
+            <div class="panel-heading"><h4 class="text-secondary">New PPA/Manager</h4>
+                <span class="text-muted text-warning">Ensure PPA is not already existing in the system.</span>
+
+            </div>
             <div class="panel-body">
-                <form class="form" action="/itf/create_coordinator" method="post">
+                <form class="form" action="/coordinator/create_manager" method="post">
                     {{ csrf_field() }}
                     <div class="form-group mb-0" >
                         @error('message')
@@ -28,7 +31,7 @@
 
                     </div>
                     <div class="form-group">
-                        <h4 class="text-center">Coordinator Details</h4>
+                        <h4 class="text-center">Manager Details</h4>
                     </div>
                     <div class="form-group">
                         <label for="firstName" class="text-info">First Name <span class="text-danger">*</span></label><br>
@@ -52,18 +55,25 @@
                         <span class="text-muted text-sm-left"><i>At least 6 characters in length</i></span>
                     </div>
                     <div class="form-group">
-                        <h4 class="text-center">School Details</h4>
-                        <span class="text-muted">Select School If does not exists yet</span>
+                        <h4 class="text-center">Company Details</h4>
                     </div>
                     <div class="form-group">
-                        <label for="department" class="text-info">Department <span class="text-danger">*</span></label><br>
-                        <input type="text" value="{{old('department')}}"  required name="department" placeholder="Department" id="department" class="form-control">
+                        <label for="companyName" class="text-info">Company Name <span class="text-danger">*</span></label><br>
+                        <input type="text" value="{{old('companyName')}}"  required name="companyName" placeholder="Company Name" id="company_name" class="form-control">
                     </div>
                     <div class="form-group">
-                        <label for="school" class="text-info">School <span class="text-danger">*</span></label><br>
-                        <select type="text"   required name="school" id="school" class="form-control">
-                            @foreach($schools as $sc)
-                                <option value="{{$sc->getName()}}">{{$sc->getName()}}</option>
+                        <label for="company_address" class="text-info">Company Address <span class="text-danger">*</span></label><br>
+                        <input type="text" value="{{old('companyAddress')}}"  required name="companyAddress" placeholder="Company Address" id="company_address" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="company_type" class="text-info">Company Address <span class="text-danger">*</span></label><br>
+                        <input type="text" value="{{old('companyType')}}"  required name="companyType" placeholder="e.g. Software or Bank" id="company_type" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="state" class="text-info">Company State <span class="text-danger">*</span></label><br>
+                        <select type="text"    name="state" id="state" required class="form-control">
+                            @foreach(getStates() as $state)
+                            <option value="{{$state->getName()}}">{{$state->getName()}}</option>
                             @endforeach
                         </select>
                     </div>

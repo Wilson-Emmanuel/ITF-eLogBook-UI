@@ -1,13 +1,14 @@
-@extends('itf.itf_dash')
+@extends('coordinator.dash')
 @section('content')
 
 <div class="row">
     <div class=" col-xs-8 col-xs-offset-2 gutter">
         <div class="panel panel-default">
             <!-- Default panel contents -->
-            <div class="panel-heading"><h4 class="text-secondary">New Coordinator</h4></div>
+            <div class="panel-heading"><h4 class="text-secondary">New Student</h4>
+            </div>
             <div class="panel-body">
-                <form class="form" action="/itf/create_coordinator" method="post">
+                <form class="form" action="/coordinator/create_student" method="post">
                     {{ csrf_field() }}
                     <div class="form-group mb-0" >
                         @error('message')
@@ -28,7 +29,7 @@
 
                     </div>
                     <div class="form-group">
-                        <h4 class="text-center">Coordinator Details</h4>
+                        <h4 class="text-center">Student Details</h4>
                     </div>
                     <div class="form-group">
                         <label for="firstName" class="text-info">First Name <span class="text-danger">*</span></label><br>
@@ -43,6 +44,10 @@
                         <input type="email" value="{{old('email')}}" required name="email" placeholder="Email Address" id="email" class="form-control">
                     </div>
                     <div class="form-group">
+                        <label for="regNo" class="text-info">Reg. No. <span class="text-danger">*</span></label><br>
+                        <input type="regNo" value="{{old('regNo')}}" required name="regNo" placeholder="Reg. No" id="regNo" class="form-control">
+                    </div>
+                    <div class="form-group">
                         <label for="phone" class="text-info">Phone <span class="text-danger">*</span></label><br>
                         <input type="text" value="{{old('phone')}}" pattern="^[0-9]{11}$" required name="phone" placeholder="Phone" id="phone" class="form-control">
                     </div>
@@ -52,20 +57,20 @@
                         <span class="text-muted text-sm-left"><i>At least 6 characters in length</i></span>
                     </div>
                     <div class="form-group">
-                        <h4 class="text-center">School Details</h4>
-                        <span class="text-muted">Select School If does not exists yet</span>
+                        <h4 class="text-center">Company Details</h4>
                     </div>
+
                     <div class="form-group">
-                        <label for="department" class="text-info">Department <span class="text-danger">*</span></label><br>
-                        <input type="text" value="{{old('department')}}"  required name="department" placeholder="Department" id="department" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label for="school" class="text-info">School <span class="text-danger">*</span></label><br>
-                        <select type="text"   required name="school" id="school" class="form-control">
-                            @foreach($schools as $sc)
-                                <option value="{{$sc->getName()}}">{{$sc->getName()}}</option>
+                        <label for="company" class="text-info">Company Name <span class="text-danger">*</span></label><br>
+                        <select type="text"    name="company" id="company" required class="form-control">
+                            @foreach($companies as $com)
+                            <option value="{{$com->getId()}}">{{$com->getCompanyName()}} | {{$com->getCompanyState()}}</option>
                             @endforeach
                         </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="startDate" class="text-info">Start Date <span class="text-danger">*</span></label><br>
+                        <input type="date" value="{{old('startDate')}}" required name="startDate" placeholder="startDate" id="startDate" class="form-control">
                     </div>
 
                     <div class="form-group text-center">

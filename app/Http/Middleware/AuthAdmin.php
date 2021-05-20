@@ -17,10 +17,9 @@ class AuthAdmin
      */
     public function handle(Request $request, Closure $next)
     {
-        $isLoggedIn = Session::has("token") && Session::has("userType") && Session::has("userId");
 
-        if($isLoggedIn){
-            $userType = $request->session()->get("userType","");
+        if(isLoggedIn()){
+            $userType = getUserType();
             if(strcmp($userType,"ITF") == 0){
                 return $next($request);
             }

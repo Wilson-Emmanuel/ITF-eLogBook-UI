@@ -2,69 +2,82 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ITFAdmin;
 use App\Traits\BaseApiRequester;
 use App\Traits\ITFAdminApi;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
 
 class AdminController extends Controller
 {
     use ITFAdminApi, BaseApiRequester;
+
     /**
      * Display a listing of the resource.
      *
+     * @param Request $request
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\Response
      */
     public function index(Request $request)
     {
-        //
-            $id = $request->session()->get("userId");
-            $data = ITFAdminApi::getAdmin($id);
-            if(!$data["status"]){
+            $user =getUser();
+            if($user ==null){
                 return redirect("/login");
             }
-            $pageMessage = null;
-            if($request->session()->has("pageMessage")){
-                $pageMessage = $request->session()->get("pageMessage");
-                $request->session()->forget("pageMessage");
-            }
+            $pageMessage =getPageMessage();
+            //dd(getUser());
+            return view("itf.profile",["user"=>$user,"pageMessage"=>$pageMessage]);
+    }
 
-            return view("itf.profile",["user"=>$data["data"],"pageMessage"=>$pageMessage]);
-    }
-    public function updatePassword(Request  $request){
-        $message = "Unsuccessful";
-        if($request->has("password")){
-            $response = Http::withHeaders(ITFAdminApi::getKeys())->put(env("BASE_URL")."/v1/itf/change-password/".session("userId"),[
-                "password"=>$request->get("password")
-            ]);
-            if($response->ok()){
-                $request->session()->put(["pageMessage"=>"Password successfully updated"]);
-                return redirect("itf/dashboard");
-            }
-        }
-        return back()->withErrors(["message"=>$message])->withInput();
-    }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\Response
      */
     public function create()
     {
-        //
+        $user = getUser();
+
+        $pageMessage = getPageMessage();
+
+        if($user == null){
+            return redirect("/login");
+        }
+        return view("itf.new_admin",[
+            "user"=>$user,
+            "pageMessage"=>$pageMessage
+        ]);
     }
 
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request)
     {
-        //
+        $d =$request->all();
+        $rd = [
+            "branch"=>$d["branch"],
+              "email"=>$d["email"],
+              "first_name"=>$d["firstName"],
+              "last_name"=>$d["lastName"],
+              "password"=>$d["password"],
+              "phone"=>$d["phone"],
+              "staff_number"=>$d["staffNo"]
+        ];
+        $response = $this->saveAdmin($rd);
+        $json = $response->json();
+        if(!$response->ok())
+            return back()->withErrors(["message"=>"Staff creation unsuccessful: ".$json["message"]])->withInput();
+        setPageMessage("Staff successfully added");
+        return redirect("/itf/create_staff");
+    }
+    public function signLogBook(){
+
+    }
+    public function unSignLogBook(){
+
     }
 
     /**
@@ -112,27 +125,40 @@ class AdminController extends Controller
         //
     }
     public function showCreateCoordinator(Request  $request){
-        $states = BaseApiRequester::getStates();
-        $schools = BaseApiRequester::getSchools();
-        $id = $request->session()->get("userId");
-        $data = ITFAdminApi::getAdmin($id);
+        $states = getStates();
+        $schools = BaseApiRequester::getSchools(["size"=>1000,"password"=>0]);
+        $user = getUser();
 
-        $pageMessage = null;
-        if($request->session()->has("pageMessage")){
-            $pageMessage = $request->session()->get("pageMessage");
-            $request->session()->forget("pageMessage");
-        }
-        if(!$data["status"]){
+        $pageMessage = getPageMessage();
+
+        if($user == null){
             return redirect("/login");
         }
         return view("itf.new_coordinator",[
             "states"=>$states,
             "schools"=>$schools,
-            "user"=>$data["data"],
+            "user"=>$user,
             "pageMessage"=>$pageMessage
         ]);
     }
-    public function createCoordinator(Request  $request){
 
+    public function storeCoordinator(Request  $request){
+        $d = $request->all();
+        $rd = [
+            "department"=> $d["department"],
+            "email"=> $d["email"],
+          "first_name"=> $d["firstName"],
+          "last_name"=> $d["lastName"],
+          "password"=> $d["password"],
+          "phone"=> $d["phone"],
+          "school_name"=> $d["school"]
+        ];
+        $response = $this->saveCoordinator($rd);
+
+        $json = $response->json();
+        if(!$response->ok())
+            return back()->withErrors(["message"=>"Coordinator creation unsuccessful: ".$json["message"]])->withInput();
+        setPageMessage("Coordinator successfully added");
+        return redirect("/itf/create_coordinator");
     }
 }

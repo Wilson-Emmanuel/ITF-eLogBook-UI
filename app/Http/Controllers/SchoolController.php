@@ -2,45 +2,52 @@
 
 namespace App\Http\Controllers;
 
+use App\Traits\SchoolApi;
 use Illuminate\Http\Request;
 
-class CoordinatorController extends Controller
+class SchoolController extends Controller
 {
+    use SchoolApi;
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\Response
+     * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        $user =getUser();
-        if($user ==null){
-            return redirect("/login");
-        }
-        $pageMessage =getPageMessage();
-        //dd(getUser());
-        return view("coordinator.profile",["user"=>$user,"pageMessage"=>$pageMessage]);
+        //
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+        $pageMessage = getPageMessage();
+        return view("itf.new_school",["user"=>getUser(),"pageMessage"=>$pageMessage]);
     }
 
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\RedirectResponse
      */
     public function store(Request $request)
     {
-        //
+        $data = [
+            "school_name"=>$request->get("schoolName"),
+            "address"=>$request->get("schoolAddress"),
+            "state_name"=>$request->get("schoolState")
+        ];
+        $school =$this->addSchool($data);
+        $schooljson = $school->json();
+        if(!$school->ok())
+            return back()->withErrors(["message"=>"School creation unsuccessful: ".$schooljson["message"]])->withInput();
+        setPageMessage("School successfully added");
+        return redirect("/itf/create_school");
     }
 
     /**
