@@ -40,6 +40,7 @@ class StudentController extends Controller
             return redirect("/login");
         }
         return view("coordinator.new_student",[
+            "user"=>$user,
             "companies"=>$companies,
             "student"=>$user,
             "pageMessage"=>$pageMessage
@@ -214,48 +215,104 @@ class StudentController extends Controller
     }
 
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
+    public function show_students($current){
+        //current = current page(20 students per page
+        $user = getUser();
+        $options = [
+            "page"=>$current,
+            "size"=>20
+        ];
+        if(!isAdmin()){
+            $options[strtolower(getUserType())."_email"]=$user->getInfo()->getEmail();
+        }
+        $res = $this->searchStudents($options);
+        if(!$res["status"])
+            return back();
+
+        $students = $res["students"];
+        $pages = $res["pages"];
+        //dd($options,$students);
+        return view(strtolower(getUserType()).".students",[
+            "user"=>$user,
+            "students"=>$students,
+            "current"=>$current,
+            "pages"=>$pages
+        ]);
+
+    }
+    public function show_coordinator_students($email){
+        //current = current page(20 students per page
+        $user = getUser();
+        $options = [
+            "page"=>0,
+            "size"=>1000,
+            "coordinator_email"=>$email
+        ];
+
+        $res = $this->searchStudents($options);
+        if(!$res["status"])
+            return back();
+
+        $students = $res["students"];
+
+        return view("itf.coordinator.students",[
+            "user"=>$user,
+            "students"=>$students,
+        ]);
+    }
+    public function view_student($student_id){
+        $id = decode_parameter($student_id);
+        $user = getUser();
+        $student = $this->getStudent($id);
+        if(!isset($student))
+            return back();
+
+        if(isCoordinator() && strcmp($student->getCoordinatorEmail(),$user->getInfo()->getEmail()) != 0)
+            return back();
+        if(isManager() && strcmp($student->getManagerEmail(),$user->getInfo()->getEmail()) != 0)
+            return back();
+
+        return view(strtolower(getUserType()).".student",[
+            "user"=>$user,
+            "student"=>$student
+        ]);
+    }
+    public function view_student_logbook($student_id, $week_no){
+        $id = decode_parameter($student_id);
+        $student = $this->getStudent($id);
+        $user = getUser();
+        if(!isset($student))
+            return back();
+        if(isCoordinator() && strcmp($student->getCoordinatorEmail(),$user->getInfo()->getEmail()) != 0)
+            return back();
+        if(isManager() && strcmp($student->getManagerEmail(),$user->getInfo()->getEmail()) != 0)
+            return back();
+
+        $week = null;
+        $pageMessage =getPageMessage();
+        if(count($student->getWeeks()) >= $week_no && $week_no >0){
+            $week = $student->getWeeks()[$week_no-1];
+        }
+        $start = max(1,$week_no-5);
+        $end = min(count($student->getWeeks()), $week_no+5);
+        $startDay = "";
+        $endDay = "";
+        if(isset($week)){
+            $days = $week->getDays();
+            $startDay = $days[0]->getDate();
+            $endDay = $days[count($days)-1]->getDate();
+        }
+        return view(strtolower(getUserType()).".logbook",[
+            "user"=>$user,
+            "student"=>$student,
+            "pageMessage"=>$pageMessage,
+            "weekNo"=>$week_no,
+            "week"=>$week,
+            "start"=>$start,
+            "end"=>$end,
+            "startDay"=>$startDay,
+            "endDay"=>$endDay
+        ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
 }

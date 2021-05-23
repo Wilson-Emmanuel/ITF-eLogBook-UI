@@ -66,7 +66,7 @@
                         <input type="text" value="{{old('companyAddress')}}"  required name="companyAddress" placeholder="Company Address" id="company_address" class="form-control">
                     </div>
                     <div class="form-group">
-                        <label for="company_type" class="text-info">Company Address <span class="text-danger">*</span></label><br>
+                        <label for="company_type" class="text-info">Company Type <span class="text-danger">*</span></label><br>
                         <input type="text" value="{{old('companyType')}}"  required name="companyType" placeholder="e.g. Software or Bank" id="company_type" class="form-control">
                     </div>
                     <div class="form-group">

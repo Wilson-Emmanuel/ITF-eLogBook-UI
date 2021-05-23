@@ -31,9 +31,9 @@
                 <div class="navi">
                     <ul>
                         <li class="active"><a href="{{route('itf_dashboard')}}"><i class="fas fa-user" aria-hidden="true"></i><span class="hidden-xs hidden-sm">Profile</span></a></li>
-                        <li><a href="#"><i class="fas fa-university" aria-hidden="true"></i><span class="hidden-xs hidden-sm">Schools</span></a></li>
-                        <li><a href="#"><i class="fas fa-user-tag" aria-hidden="true"></i><span class="hidden-xs hidden-sm">Coordinators</span></a></li>
-                        <li><a href="#"><i class="fas fa-user-graduate" aria-hidden="true"></i><span class="hidden-xs hidden-sm">Students</span></a></li>
+<!--                        <li><a href="#"><i class="fas fa-university" aria-hidden="true"></i><span class="hidden-xs hidden-sm">Schools</span></a></li>-->
+                        <li><a href="{{route('show_coordinators',['current'=>0])}}"><i class="fas fa-user-tag" aria-hidden="true"></i><span class="hidden-xs hidden-sm">Coordinators</span></a></li>
+                        <li><a href="{{route('show_students',['current'=>0])}}"><i class="fas fa-user-graduate" aria-hidden="true"></i><span class="hidden-xs hidden-sm">Students</span></a></li>
 
                      </ul>
                 </div>
@@ -62,10 +62,12 @@
                                 <li><a href="{{route('itf_show_create_coordinator')}}">Create Coordinator</a></li>
 <!--                                <li><a href="#">Manage Coordinators</a></li>-->
 <!--                                <li><a href="#">Manage Students</a></li>-->
-                                <li role="separator" class="divider"></li>
-                                <li><a href="{{route('show_create_school')}}">Add School</a></li>
-                                <li><a href="{{route('show_create_staff')}}">Add Staff</a></li>
+                                <li><a href="{{route('show_create_school')}}">Create School</a></li>
+                                <li><a href="{{route('show_create_staff')}}">Create Staff</a></li>
 <!--                                <li><a href="#">Schools</a></li>-->
+                                <li role="separator" class="divider"></li>
+                                <li><a href="{{route('show_students',['current'=>0])}}">Students</a></li>
+                                <li><a href="{{route('show_coordinators',['current'=>0])}}">Coordinators</a></li>
                             </ul>
                             </div>
                         </div>

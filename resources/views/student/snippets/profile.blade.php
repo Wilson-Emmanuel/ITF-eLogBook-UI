@@ -22,6 +22,14 @@
                         <th>Reg No.: </th>
                         <td>{{$student->getRegNo()}}</td>
                     </tr>
+                    @if(!isStudent())
+                    <tr>
+                        <th>&nbsp;</th>
+                        <td>
+                            <a href="{{route('view_student_logbook',['student_id'=>encode_parameter($student->getId()),'week_no'=>1])}}">View {{$student->getInfo()->getFirstName()}}'s Log Book</a>
+                        </td>
+                    </tr>
+                    @endif
 
                 </table>
             </div>
@@ -42,13 +50,32 @@
                             @if($student->isPaid())
                             <span class="badge badge-success" style="background-color: yellowgreen; color: white;">Paid</span>
                             @else
-                            <span class="badge " style="color: white; background-color: darkred;">Not Paid</span>
-                            @if(isStudent())
-                            <a href="{{route('student_update_bank')}}" class=" btn-primary btn-sm" >Update</a>
-                            @endif
+                                    @if(isAdmin())
+                                    <form class="form" action="/itf/pay" method="post">
+                                        {{ csrf_field() }}
+                                        @error('message')
+                                        <div class='alert alert-danger'>
+                                                      <span>
+                                                        {{$message}}</span>
+                                        </div>
+                                        @enderror
+
+                                        <input type="hidden" name="studentId" value="{{$student->getId()}}">
+                                        <button type="submit" name="submit" class="btn btn-primary btn-sm">Pay Student</button>
+                                    </form>
+                                    @else
+                                    <span class="badge " style="color: white; background-color: darkred;">Not Paid</span>
+                                    @endif
+
                             @endif
                         </td>
                     </tr>
+                    @endif
+                    @if(isStudent())
+                        <tr>
+                            <th>&nbsp;</th>
+                            <td> <a href="{{route('student_update_bank')}}" class=" btn-primary btn-sm" >Update Bank Details</a></td>
+                        </tr>
                     @endif
                     <tr>
                         <th>Account Name: </th>

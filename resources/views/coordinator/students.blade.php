@@ -1,4 +1,4 @@
-@extends('manager.dash')
+@extends('coordinator.dash')
 @section('content')
 
 @include('student.snippets.students')

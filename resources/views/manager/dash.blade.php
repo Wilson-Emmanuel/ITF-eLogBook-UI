@@ -31,7 +31,7 @@
             <div class="navi">
                 <ul>
                     <li class="active"><a href="{{route('manager_dashboard')}}"><i class="fas fa-user" aria-hidden="true"></i><span class="hidden-xs hidden-sm">Profile</span></a></li>
-                    <li><a href="{{route('manager_show_students',['current'=>0])}}"><i class="fas fa-user-graduate" aria-hidden="true"></i><span class="hidden-xs hidden-sm">Students</span></a></li>
+                    <li><a href="{{route('show_students',['current'=>0])}}"><i class="fas fa-user-graduate" aria-hidden="true"></i><span class="hidden-xs hidden-sm">Students</span></a></li>
 
                 </ul>
             </div>
@@ -57,7 +57,7 @@
                             </button>
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
                                 <li><a href="{{route('manager_dashboard')}}">Profile</a></li>
-                                <li><a href="{{route('manager_show_students',['current'=>0])}}">Students</a></li>
+                                <li><a href="{{route('show_students',['current'=>0])}}">Students</a></li>
                                 <li role="separator" class="divider"></li>
                             </ul>
                         </div>

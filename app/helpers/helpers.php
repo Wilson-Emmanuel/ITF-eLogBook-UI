@@ -90,6 +90,7 @@ function getPageMessage(){
 function setPageMessage($pageMessage){
     Session::put("pageMessage",$pageMessage);
 }
+
 function clearSession(){
     Session::forget(["userType","user","userId","token"]);
 }

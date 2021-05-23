@@ -6,6 +6,8 @@ use App\Http\Middleware\AuthAdmin;
 use App\Http\Middleware\AuthCoordinator;
 use App\Http\Middleware\AuthManager;
 use App\Http\Middleware\AuthStudent;
+use App\Http\Middleware\ExceptStudentAndManagerAuth;
+use App\Http\Middleware\ExceptStudentAuth;
 use App\Http\Middleware\PreventRequestsDuringMaintenance;
 use App\Http\Middleware\TrimStrings;
 use App\Http\Middleware\TrustProxies;
@@ -75,6 +77,8 @@ class Kernel extends HttpKernel
         'student_login' => AuthStudent::class,
         'manager_login' => AuthManager::class,
         'coordinator_login' => AuthCoordinator::class,
-        'admin_login' => AuthAdmin::class
+        'admin_login' => AuthAdmin::class,
+        'except_student_auth'=>ExceptStudentAuth::class,
+        'except_student_and_manager_auth'=>ExceptStudentAndManagerAuth::class
     ];
 }

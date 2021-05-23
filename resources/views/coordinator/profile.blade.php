@@ -1,56 +1,7 @@
 @extends('coordinator.dash')
 @section('content')
 <h1>Hello, {{$user->getInfo()->getFullName()}}</h1>
-<div class="row">
-    <div class="text-center col-xs-8 col-xs-offset-2 gutter">
-        <div class="panel panel-default">
-            <!-- Default panel contents -->
-            <div class="panel-heading"><h4 class="text-secondary">Profile</h4></div>
-            <div class="panel-body">
-                <!--
-
-
-                                                Table -->
-                <table class="table table-striped table-active">
-                    <tr>
-                        <th>Full Name: </th>
-                        <td>{{$user->getInfo()->getFullName()}}</td>
-                    </tr>
-                    <tr>
-                        <th>Email: </th>
-                        <td>{{$user->getInfo()->getEmail()}}</td>
-                    </tr>
-                    <tr>
-                        <th>Phone: </th>
-                        <td>{{$user->getInfo()->getPhone()}}</td>
-                    </tr>
-                    <tr>
-                        <th>Department: </th>
-                        <td>{{$user->getDepartment()}}</td>
-                    </tr>
-                </table>
-                <h4 class="text-secondary">School Details</h4>
-                <table class="table table-striped table-active">
-                    <tr>
-                        <th>School Name: </th>
-                        <td>{{$user->getSchool()->getName()}}</td>
-                    </tr>
-                    <tr>
-                        <th>School Address: </th>
-                        <td>{{$user->getSchool()->getAddress()}}</td>
-                    </tr>
-                    <tr>
-                        <th>State: </th>
-                        <td>{{$user->getSchool()->getStateName()}}</td>
-                    </tr>
-
-                </table>
-            </div>
-        </div>
-
-    </div>
-
-</div>
+@include('coordinator.snippets.profile',['coordinator'=>$user])
 <div class="row">
     <div class="text-center col-xs-8 col-xs-offset-2 gutter">
         <div class="panel panel-default">
