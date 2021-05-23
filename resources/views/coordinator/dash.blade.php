@@ -31,8 +31,8 @@
             <div class="navi">
                 <ul>
                     <li class="active"><a href="{{route('coordinator_dashboard')}}"><i class="fas fa-user" aria-hidden="true"></i><span class="hidden-xs hidden-sm">Profile</span></a></li>
-                    <li><a href="#"><i class="fas fa-user-tag" aria-hidden="true"></i><span class="hidden-xs hidden-sm">PPA/Managers</span></a></li>
-                    <li><a href="#"><i class="fas fa-user-graduate" aria-hidden="true"></i><span class="hidden-xs hidden-sm">Students</span></a></li>
+<!--                    <li><a href="{{route('show_managers',['current'=>0])}}"><i class="fas fa-user-tag" aria-hidden="true"></i><span class="hidden-xs hidden-sm">PPA/Managers</span></a></li>-->
+                    <li><a href="{{route('show_students',['current'=>0])}}"><i class="fas fa-user-graduate" aria-hidden="true"></i><span class="hidden-xs hidden-sm">Students</span></a></li>
 
                 </ul>
             </div>
@@ -61,6 +61,8 @@
                                 <li><a href="{{route('coordinator_show_create_student')}}">Add Students</a></li>
                                 <li><a href="{{route('coordinator_show_create_manager')}}">Add PPA</a></li>
                                 <li role="separator" class="divider"></li>
+                                <li><a href="{{route('show_students',['current'=>0])}}">Students</a></li>
+<!--                                <li><a href="{{route('show_managers',['current'=>0])}}">PPA/Managers</a></li>-->
                             </ul>
                         </div>
                     </div>
@@ -113,32 +115,6 @@
 
 </div>
 
-
-
-<!-- Modal -->
-<div id="add_project" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-
-        <!-- Modal content-->
-        <div class="modal-content">
-            <div class="modal-header login-header">
-                <button type="button" class="close" data-dismiss="modal">×</button>
-                <h4 class="modal-title">Add Project</h4>
-            </div>
-            <div class="modal-body">
-                <input type="text" placeholder="Project Title" name="name">
-                <input type="text" placeholder="Post of Post" name="mail">
-                <input type="text" placeholder="Author" name="passsword">
-                <textarea placeholder="Desicrption"></textarea>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="cancel" data-dismiss="modal">Close</button>
-                <button type="button" class="add-project" data-dismiss="modal">Save</button>
-            </div>
-        </div>
-
-    </div>
-</div>
 <footer class="py-2 bg-white">
     <div class="container"><p class="m-0 text-bold text-center small">Copyright &copy; ITF e-Logbook. Designed and Implemented by Onyibe Godstime 2021</p></div>
 

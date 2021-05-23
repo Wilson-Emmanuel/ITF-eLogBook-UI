@@ -4,11 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Traits\BaseApiRequester;
 use App\Traits\ITFAdminApi;
+use App\Traits\StudentApi;
 use Illuminate\Http\Request;
 
 class AdminController extends Controller
 {
-    use ITFAdminApi, BaseApiRequester;
+    use ITFAdminApi, BaseApiRequester, StudentApi;
 
     /**
      * Display a listing of the resource.
@@ -73,11 +74,24 @@ class AdminController extends Controller
         setPageMessage("Staff successfully added");
         return redirect("/itf/create_staff");
     }
-    public function signLogBook(){
+    public function signLogBook(Request $request){
+        $id = $request->get("studentId");
+        $weekNo = $request->get("weekNo");
+        $response = $this->signStudentLogBook($id);
+        if(!$response->ok())
+            return back()->withErrors("Unsuccessful: ".$response->json()["message"]);
 
+        setPageMessage("Student successfully signed.");
+        return redirect("/logbook/".encode_parameter($id)."/".$weekNo);
     }
-    public function unSignLogBook(){
+    public function pay(Request $request){
+        $id = $request->get("studentId");
+        $response = $this->payStudent($id);
+        if(!$response->ok())
+            return back()->withErrors("Unsuccessful: ".$response->json()["message"]);
 
+        //setPageMessage("Student successfully paid.");
+        return redirect("/student/".encode_parameter($id));
     }
 
     /**

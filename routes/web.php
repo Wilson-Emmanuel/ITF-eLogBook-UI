@@ -58,7 +58,11 @@ Route::middleware(['admin_login'])->group(function () {
         Route::get('/create_staff',[AdminController::class,'create'])->name("show_create_staff");
         Route::post('/create_staff',[AdminController::class,'store']);
         Route::post('/sign_logbook',[AdminController::class,'signLogBook'] );
-        Route::post('/unsign_logbook',[AdminController::class,'unSignLogBook'] );
+        Route::post('/pay',[AdminController::class,'pay'] );
+
+        Route::get('/coordinators/{current}',[CoordinatorController::class,'show_coordinators'])->name("show_coordinators");
+        Route::get('/coordinator/{coordinator_id}',[CoordinatorController::class,'view_coordinator'])->name("view_coordinator");
+        Route::get('/coordinator_students/{email}',[StudentController::class,'show_coordinator_students'])->name("show_coordinator_students");
     });
 });
 
@@ -71,6 +75,9 @@ Route::middleware(['coordinator_login'])->group(function () {
         Route::post('/create_student',[StudentController::class,'store'] );
         Route::get('/create_manager',[ManagerController::class,'create'] )->name("coordinator_show_create_manager");
         Route::post('/create_manager',[ManagerController::class,'store'] );
+
+        Route::get('/update_remark/{student_id}',[CoordinatorController::class,'show_update_remark_detail'])->name("show_update_remark");
+        Route::post('/update_remark',[CoordinatorController::class,'update_remark'] );
     });
 });
 
@@ -80,9 +87,18 @@ Route::middleware(['manager_login'])->group(function () {
     Route::prefix('manager')->group(function () {
         Route::get('/dashboard',[ManagerController::class,'index'] )->name("manager_dashboard");
         Route::post('/sign_week',[ManagerController::class,'signWeek'] );
-        Route::get('/students/{current}',[ManagerController::class,'show_students'])->name("manager_show_students");
-        Route::get('/student/{student_id}',[ManagerController::class,'view_student'])->name("manager_view_student");
-        Route::get('/logbook/{student_id}/{week_no}',[ManagerController::class,'view_student_logbook'])->name("manager_view_student_logbook");
+
     });
+});
+
+Route::middleware(['except_student_auth'])->group(function (){
+    Route::get('/students/{current}',[StudentController::class,'show_students'])->name("show_students");
+    Route::get('/student/{student_id}',[StudentController::class,'view_student'])->name("view_student");
+    Route::get('/logbook/{student_id}/{week_no}',[StudentController::class,'view_student_logbook'])->name("view_student_logbook");
+});
+
+Route::middleware(['except_student_and_manager_auth'])->group(function (){
+    Route::get('/managers/{current}',[ManagerController::class,'show_managers'])->name("show_managers");
+    Route::get('/managers/{manager_id}',[ManagerController::class,'view_manager'])->name("view_manager");
 });
 

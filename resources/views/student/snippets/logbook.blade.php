@@ -4,7 +4,7 @@
             <!-- Default panel contents -->
             <div class="panel-heading"><h4 class="text-secondary">Log Book</h4></div>
             <div class="panel-body">
-                <table class="table table-striped table-active">
+                <table class="table table-active">
                     <tr>
                         @isset($pageMessage)
                         <div class='alert alert-success'>
@@ -20,55 +20,74 @@
                         @enderror
                     </tr>
                     <tr>
-                        <th>Coordinator's Remark:</th>
-                        <td>{{$student->getCoordinatorRemark()}}</td>
+                        <th>Student Full Name: </th>
+                        <td align="center">{{$student->getInfo()->getFullName()}}</td>
                     </tr>
                     <tr>
+                        <th>School Name: </th>
+                        <td align="center">{{$student->getSchoolName()}}</td>
+                    </tr>
+                    <tr>
+                        <th>Department: </th>
+                        <td align="center">{{$student->getDepartment()}}</td>
+                    </tr>
+                    @if(!isStudent())
+                    <tr><th>&nbsp;</th>
+                        <td align="center"><a href="{{route('view_student',['student_id'=>encode_parameter($student->getId())])}}">View {{$student->getInfo()->getFirstName()}}'s Full Profile</a></td>
+                    </tr>
+                    @endif
+
+                    <tr>
+                        <th>Coordinator's Remark:</th>
+                        <td align="center">{{$student->getCoordinatorRemark()}}</td>
+                    </tr>
+                    @if(isCoordinator())
+                        <tr><th>&nbsp;</th>
+                            <td align="center" >
+                                <a href="{{route('show_update_remark',['student_id'=>encode_parameter($student->getId())])}}" class=" btn-primary btn-sm" >Update Remark</a>
+                            </td>
+
+                        </tr>
+                    @endif
+                    <tr>
                         <th>Log Book Signature Status</th>
-                        <td>
+                        <td align="center">
                             @if($student->isLogBookSigned())
                             <span class="badge badge-success" style="background-color: yellowgreen; color: white;">Signed</span>
-                            <form class="form" action="/itf/unsign_logbook" method="post">
-                                {{ csrf_field() }}
-                                @error('message')
-                                <div class='alert alert-danger'>
+                            @else
+
+                                @if(isAdmin())
+                                <form class="form" action="/itf/sign_logbook" method="post">
+                                    {{ csrf_field() }}
+                                    @error('message')
+                                    <div class='alert alert-danger'>
                                               <span>
                                                 {{$message}}</span>
-                                </div>
-                                @enderror
-                                <button type="submit" name="submit" class="btn btn-primary btn-sm">Unsign</button>
+                                    </div>
+                                    @enderror
+                                    <input type="hidden" name="weekNo" value="{{$weekNo}}">
+                                    <input type="hidden" name="studentId" value="{{$student->getId()}}">
+                                    <button type="submit" name="submit" class="btn btn-primary btn-sm">Sign Log Book</button>
 
-                            </form>
-                            @else
-                            <span class="badge " style="color: white; background-color: darkred;">Not Signed</span>
-                            @if(isAdmin())
-                            <form class="form" action="/itf/sign_logbook" method="post">
-                                {{ csrf_field() }}
-                                @error('message')
-                                <div class='alert alert-danger'>
-                                          <span>
-                                            {{$message}}</span>
-                                </div>
-                                @enderror
-                                <input type="hidden" name="weekNo" value="{{$weekNo}}">
-                                <button type="submit" name="submit" class="btn btn-primary btn-sm">Sign</button>
-
-                            </form>
-                            @endif
+                                </form>
+                                @else
+                                <span class="badge " style="color: white; background-color: darkred;">Not Signed</span>
+                                @endif
                             @endif
                         </td>
                     </tr>
                     <tr>
                         <th>Start Date:</th>
-                        <td>{{$student->getStartDate()}}</td>
+                        <td align="center">{{$student->getStartDate()}}</td>
                     </tr>
                     <tr>
-                        <th>Weeks:</th>
-                        <td>{{count($student->getWeeks())}}</td>
+                        <th>Weeks Elapsed:</th>
+                        <td align="center">{{count($student->getWeeks())}}</td>
                     </tr>
 
                 </table>
-
+                <hr style="display: block; margin-top: 0.5em; margin-bottom: 0.5em; margin-left: auto; margin-right: auto; border-style: inset;
+    border-width: 1px;">
                 <table class="table table-striped table-active">
                     @if(isset($week))
 
@@ -79,18 +98,18 @@
                             @if($week->isSigned())
                             <span class="badge badge-success" style="background-color: yellowgreen; color: white;">Signed</span>
                             @else
-                            <span class="badge " style="color: white; background-color: darkred;">Not Signed</span>
-                            @if(isManager())
-                            <form class="form" action="/manager/sign_week" method="post">
-                                {{ csrf_field() }}
-                                <input type="hidden" name="weekNo" value="{{$weekNo}}">
-                                <input type="hidden" name="start" value="{{$startDay}}">
-                                <input type="hidden" name="end" value="{{$endDay}}">
-                                <input type="hidden" name="studentId" value="{{encode_parameter($student->getId())}}">
-                                <button type="submit" name="submit" class="btn btn-primary btn-sm">Sign</button>
-
-                            </form>
-                            @endif
+                                @if(isManager())
+                                    <form class="form" action="/manager/sign_week" method="post">
+                                        {{ csrf_field() }}
+                                        <input type="hidden" name="weekNo" value="{{$weekNo}}">
+                                        <input type="hidden" name="start" value="{{$startDay}}">
+                                        <input type="hidden" name="end" value="{{$endDay}}">
+                                        <input type="hidden" name="studentId" value="{{encode_parameter($student->getId())}}">
+                                        <button type="submit" name="submit" class="btn btn-primary btn-sm">Sign Week</button>
+                                    </form>
+                                @else
+                                    <span class="badge " style="color: white; background-color: darkred;">Not Signed</span>
+                                @endif
                             @endif
                         </td>
 
@@ -142,8 +161,8 @@
                             <a href="{{route('student_show_logbook',['week_no'=>$weekNo-1])}}" aria-label="Previous">
                                 <span aria-hidden="true">&laquo;</span>
                             </a>
-                            @elseif(isManager())
-                            <a href="{{route('manager_view_student_logbook',['student_id'=>encode_parameter($student->getId()), 'week_no'=>$weekNo-1])}}" aria-label="Previous">
+                            @else
+                            <a href="{{route('view_student_logbook',['student_id'=>encode_parameter($student->getId()), 'week_no'=>$weekNo-1])}}" aria-label="Previous">
                                 <span aria-hidden="true">&laquo;</span>
                             </a>
                             @endif
@@ -152,8 +171,8 @@
                         @for ($i = $start; $i <= $end; $i++)
                             @if(isStudent())
                                 <li class="@if($i == $weekNo) {{'active'}} @endif"><a  href="{{route('student_show_logbook',['week_no'=>$i])}}">{{$i}}</a></li>
-                            @elseif(isManager())
-                                <li class="@if($i == $weekNo) {{'active'}} @endif"><a  href="{{route('manager_view_student_logbook',['student_id'=>encode_parameter($student->getId()),'week_no'=>$i])}}">{{$i}}</a></li>
+                            @else
+                                <li class="@if($i == $weekNo) {{'active'}} @endif"><a  href="{{route('view_student_logbook',['student_id'=>encode_parameter($student->getId()),'week_no'=>$i])}}">{{$i}}</a></li>
                             @endif
                         @endfor
 
@@ -163,8 +182,8 @@
                                 <a href="{{route('student_show_logbook',['week_no'=>$weekNo+1])}}" aria-label="Next">
                                     <span aria-hidden="true">&raquo;</span>
                                 </a>
-                            @elseif(isManager())
-                                <a href="{{route('manager_view_student_logbook',['student_id'=>encode_parameter($student->getId()), 'week_no'=>$weekNo+1])}}" aria-label="Next">
+                            @else
+                                <a href="{{route('view_student_logbook',['student_id'=>encode_parameter($student->getId()), 'week_no'=>$weekNo+1])}}" aria-label="Next">
                                     <span aria-hidden="true">&raquo;</span>
                                 </a>
                             @endif

@@ -87,114 +87,11 @@ class ManagerController extends Controller
         setPageMessage("Log Booked Signed for Week ".$request->get("weekNo")." : ".$options["start_date"]." - ".$options["end_date"]);
         return redirect("/manager/logbook/".encode_parameter($student_id)."/".$request->get("weekNo"));
     }
-    public function show_students($current){
-        //current = current page(20 students per page
-        $options = [
-            "page"=>$current,
-            "size"=>20,
-            "manager_email"=>getUser()->getInfo()->getEmail()
-        ];
-        $res = $this->searchStudents($options);
-        if(!$res["status"])
-            return back();
 
-        $students = $res["students"];
-        $pages = $res["pages"];
-        return view("manager.students",[
-            "user"=>getUser(),
-            "students"=>$students,
-            "current"=>$current,
-            "pages"=>$pages
-        ]);
+    public function show_managers($current){
 
     }
-    public function view_student($student_id){
-        $id = decode_parameter($student_id);
-        $user = getUser();
-        $student = $this->getStudent($id);
-        if(!isset($student) || strcmp($student->getInfo()->getEmail(),$user->getInfo()->getEmail()) != 0)
-            return back();
+    public function view_manager($manager_id){
 
-        return view("manager.student",[
-            "user"=>$user,
-            "student"=>$student
-        ]);
-    }
-    public function view_student_logbook($student_id, $week_no){
-        $id = decode_parameter($student_id);
-        $student = $this->getStudent($id);
-        if(!isset($student))
-            return back();
-
-        $week = null;
-        $pageMessage =getPageMessage();
-        if(count($student->getWeeks()) >= $week_no && $week_no >0){
-            $week = $student->getWeeks()[$week_no-1];
-        }
-        $start = max(1,$week_no-5);
-        $end = min(count($student->getWeeks()), $week_no+5);
-        $startDay = "";
-        $endDay = "";
-        if(isset($week)){
-            $days = $week->getDays();
-            $startDay = $days[0]->getDate();
-            $endDay = $days[count($days)-1]->getDate();
-        }
-        return view("manager.logbook",[
-            "user"=>getUser(),
-            "student"=>$student,
-            "pageMessage"=>$pageMessage,
-            "weekNo"=>$week_no,
-            "week"=>$week,
-            "start"=>$start,
-            "end"=>$end,
-            "startDay"=>$startDay,
-            "endDay"=>$endDay
-        ]);
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
     }
 }
